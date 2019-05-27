@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index()
     {
         if (Auth::User()) {
-            return response()->json(['Rumman']);
+            return response()->json(Auth::User());
         } else {
             return response()->json([]);
         }
