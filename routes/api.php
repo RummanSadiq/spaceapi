@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,7 +137,7 @@ Route::group(['middleware' => ['json.response']], function () {
 
             return response()->json([
                 'status' => 'done',
-                'url' => 'https://pulsespace.com/storage/' . $request->file('image')->store($type)
+                'url' => $url = Storage::url($request->file('image')->store($type))
             ]);
         }
     );
