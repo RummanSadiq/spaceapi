@@ -130,12 +130,12 @@ Route::group(['middleware' => ['json.response']], function () {
         function (Request $request, $type) {
             $image = $request->file('image');
             $input['imagename'] = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('images/' . $type);
+            $destinationPath = './public_html/images/' . $type;
             $image->move($destinationPath, $input['imagename']);
 
             return response()->json([
                 'status' => 'done',
-                'url' => $destinationPath . '/' . $input['imagename']
+                'url' => 'https://pulsespace.com/' . $type . '/' . $input['imagename']
             ]);
         }
     );
