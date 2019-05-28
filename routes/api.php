@@ -137,7 +137,7 @@ Route::group(['middleware' => ['json.response']], function () {
 
             return response()->json([
                 'status' => 'done',
-                'url' => $url = Storage::url($request->file('image')->store($type))
+                'url' => Storage::url($request->file('image')->store($type))
             ]);
         }
     );
