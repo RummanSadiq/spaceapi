@@ -128,14 +128,15 @@ Route::group(['middleware' => ['json.response']], function () {
     Route::post(
         '/attachment/{type}',
         function (Request $request, $type) {
-            $image = $request->file('image');
-            $input['imagename'] = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = './public_html/images/' . $type;
-            $image->move($destinationPath, $input['imagename']);
+
+            // $image = $request->file('image');
+            // $input['imagename'] = time() . '.' . $image->getClientOriginalExtension();
+            // $destinationPath = './public_html/images/' . $type;
+            // $image->move($destinationPath, $input['imagename']);
 
             return response()->json([
                 'status' => 'done',
-                'url' => 'https://pulsespace.com/images/' . $type . '/' . $input['imagename']
+                'url' => 'https://pulsespace.com/storage/' . $request->file('image')->store($type)
             ]);
         }
     );
