@@ -135,7 +135,7 @@ Route::group(['middleware' => ['json.response']], function () {
 
             return response()->json([
                 'status' => 'done',
-                'url' => '../images/' . $type  . '/' . $input['imagename']
+                'url' => $destinationPath . '/' . $input['imagename']
             ]);
         }
     );
