@@ -135,7 +135,7 @@ Route::group(['middleware' => ['json.response']], function () {
 
             return response()->json([
                 'status' => 'done',
-                'url' => 'https://pulsespace.com/' . $type . '/' . $input['imagename']
+                'url' => 'https://pulsespace.com/images/' . $type . '/' . $input['imagename']
             ]);
         }
     );
