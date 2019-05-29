@@ -123,10 +123,10 @@ Route::group(['middleware' => ['json.response']], function () {
         //Conversations
         Route::get('/conversations/shop', 'Api\ConversationController@shopConversations');
         Route::get('/conversations/customer', 'Api\ConversationController@customerConversations');
+
+        Route::get('/user', 'Api\UserController@index');
     });
 
-
-    Route::get('/user', 'Api\UserController@index');
 
     //Image Attachments 
     Route::post(
