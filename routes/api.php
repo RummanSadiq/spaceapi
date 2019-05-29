@@ -82,6 +82,7 @@ Route::group(['middleware' => ['json.response']], function () {
 
         //Products
         Route::get('/products', 'Api\ProductController@index');
+        Route::get('/myproducts', 'Api\ProductController@myProducts');
         Route::post('/products', 'Api\ProductController@getFiltered');
         Route::post('/products/discount', 'Api\ProductController@setDiscount');
         Route::get('/products/shop/{id}', 'Api\ProductController@getShopProducts');
