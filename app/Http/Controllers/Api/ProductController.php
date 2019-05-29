@@ -24,6 +24,13 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
+
+        return response()->json($this->modifyProducts($products));
+    }
+
+
+    private function modifyProducts($products)
+    {
         foreach ($products as $prod) {
             $prod['shop_name'] = Shop::find($prod->shop_id)->name;
             $prod['category_name'] = Category::find($prod->category_id)->name;
@@ -55,20 +62,18 @@ class ProductController extends Controller
             }
             $prod["key"] = $prod->id;
         }
-        return response()->json($products);
+
+        return $products;
     }
+
 
     public function myProducts()
     {
-
         $user = Auth::user();
         $shop = $user->shop;
         $products = $shop->products->reverse()->values();
-        foreach ($products as $prod) {
-            $prod["key"] = $prod->id;
-            $prod["category"] = Category::find($prod->category_id)->name;
-        }
-        return response()->json($products);
+
+        return response()->json($this->modifyProducts($products));
     }
 
     public function getFiltered(Request $request)
