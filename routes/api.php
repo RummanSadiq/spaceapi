@@ -130,11 +130,6 @@ Route::group(['middleware' => ['json.response']], function () {
         '/attachment/{type}',
         function (Request $request, $type) {
 
-            // $image = $request->file('image');
-            // $input['imagename'] = time() . '.' . $image->getClientOriginalExtension();
-            // $destinationPath = './public_html/images/' . $type;
-            // $image->move($destinationPath, $input['imagename']);
-
             return response()->json([
                 'status' => 'done',
                 'url' => Storage::url($request->file('image')->store($type))
