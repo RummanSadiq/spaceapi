@@ -35,7 +35,6 @@ Route::group(['middleware' => ['json.response']], function () {
 
         // Pulsespace API's
         Route::get('/users/shop', 'Api\UserController@hasShop');
-        Route::get('/user', 'Api\UserController@index');
 
         //Store Followers
         Route::get('/follow/{id}', 'Api\ShopFollowerController@follow');
@@ -125,6 +124,9 @@ Route::group(['middleware' => ['json.response']], function () {
         Route::get('/conversations/shop', 'Api\ConversationController@shopConversations');
         Route::get('/conversations/customer', 'Api\ConversationController@customerConversations');
     });
+
+
+    Route::get('/user', 'Api\UserController@index');
 
     //Image Attachments 
     Route::post(
