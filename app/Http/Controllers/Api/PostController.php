@@ -18,21 +18,6 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function myPosts()
-    {
-        $user = Auth::user();
-        // $user = User::find(1);
-
-        $shop = $user->shop;
-        // $posts = $store->posts->sortByDesc('created_at');
-        $posts = $shop->posts->reverse()->values();
-
-        foreach ($posts as $post) {
-            $post->attachments;
-        }
-        return response()->json($posts);
-    }
-
     public function index()
     {
         $posts = Post::all();
@@ -42,6 +27,20 @@ class PostController extends Controller
             $post->shop;
         }
 
+        return response()->json($posts);
+    }
+
+
+    public function myPosts()
+    {
+        $user = Auth::user();
+
+        $shop = $user->shop;
+        $posts = $shop->posts->reverse()->values();
+
+        foreach ($posts as $post) {
+            $post->attachments;
+        }
         return response()->json($posts);
     }
 
