@@ -27,13 +27,15 @@ Route::middleware('json.response')->group(function () {
     Route::post('/register', 'Api\PassportController@register')->name('register');
 
     // private routes
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware('auth')->group(function () {
 
         Route::get('/logout', 'Api\PassportController@logout')->name('logout');
 
         //User
-        Route::get('/user', 'Api\UserController@index');
         Route::get('/users/shop', 'Api\UserController@hasShop');
+
+        //Views
+        Route::get('/myviews', 'Api\ViewController@myViews');
 
         //Shop Followers
         Route::get('/follow/{id}', 'Api\ShopFollowerController@follow');
@@ -77,6 +79,15 @@ Route::middleware('json.response')->group(function () {
         Route::post('/reviews/{id}', 'Api\ReviewController@update');
         Route::delete('/reviews/{id}', 'Api\ReviewController@destroy');
 
+        //Report
+        Route::post('/reports/users', 'Api\ReportController@userStore');
+        Route::post('/reports/shops', 'Api\ReportController@shopStore');
+        Route::post('/reports/conversations', 'Api\ReportController@conversationStore');
+        Route::post('/reports/reviews', 'Api\ReportController@reviewStore');
+        Route::post('/reports/products', 'Api\ReportController@productStore');
+        Route::post('/reports/posts', 'Api\ReportController@postStore');
+        Route::post('/reports/faqs', 'Api\ReportController@faqStore');
+
         //Messages
         // Route::get('/messages', 'Api\MessageController@index');
         Route::get('/messages/{id}', 'Api\MessageController@show');
@@ -90,6 +101,9 @@ Route::middleware('json.response')->group(function () {
     });
 
     //Unauthenticated APIs
+
+    //User
+    Route::get('/user', 'Api\UserController@index');
 
     //Shop
     Route::get('/shops', 'Api\ShopController@index');

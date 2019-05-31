@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\View;
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ViewController extends Controller
 {
@@ -14,7 +17,13 @@ class ViewController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(View::all());
+    }
+
+    public function myViews()
+    {
+        $shop = Auth::user()->shop;
+        return response()->json($shop->views()->with('user')->get());
     }
 
     /**

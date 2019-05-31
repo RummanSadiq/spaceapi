@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Post;
 use App\User;
 use App\Shop;
+use App\View;
 use App\Attachment;
 
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class PostController extends Controller
         foreach ($posts as $post) {
             $post->attachments;
             $post->shop;
+            $post['total_views'] = $post->totalViews();
         }
 
         return response()->json($posts);
@@ -40,6 +42,7 @@ class PostController extends Controller
 
         foreach ($posts as $post) {
             $post->attachments;
+            $post['total_views'] = $post->totalViews();
         }
         return response()->json($posts);
     }
@@ -50,8 +53,21 @@ class PostController extends Controller
         $shop = Shop::find($shop_id);
         $posts = $shop->posts->reverse()->values();
 
+        $user_id = 1;
+
+        if (Auth::check()) {
+            $user_id = Auth::id();
+        }
+
         foreach ($posts as $post) {
             $post->attachments;
+            $post['total_views'] = $post->totalViews();
+
+            View::create([
+                "user_id" => $user_id,
+                "parent_id" => $post->id,
+                "type" => "post"
+            ]);
         }
 
         return response()->json($posts);
@@ -78,7 +94,6 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        // $user = User::find(1);
 
         $shop = $user->shop;
         $request['shop_id'] = $shop->id;

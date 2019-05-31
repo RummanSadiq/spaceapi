@@ -20,8 +20,18 @@ class Post extends Model
         return $this->belongsTo('App\Shop');
     }
 
+    public function views()
+    {
+        return $this->hasMany('App\View', 'parent_id')->where('type', 'post');
+    }
+
     public function attachments()
     {
         return $this->hasMany('App\Attachment', 'parent_id')->where('type', 'post');
+    }
+
+    public function totalViews()
+    {
+        return $this->views->count();
     }
 }

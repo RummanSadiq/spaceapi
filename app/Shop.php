@@ -50,6 +50,11 @@ class Shop extends Model
         return $this->hasMany('App\Attachment', 'parent_id')->where('type', 'shop');
     }
 
+    public function views()
+    {
+        return $this->hasMany('App\View', 'parent_id')->where('type', 'shop');
+    }
+
     public function promotion()
     {
         return $this->hasOne('App\Promotion');
@@ -78,5 +83,10 @@ class Shop extends Model
     public function faqs()
     {
         return $this->hasMany('App\Faq');
+    }
+
+    public function totalViews()
+    {
+        return $this->views->count();
     }
 }

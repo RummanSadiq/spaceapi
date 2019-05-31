@@ -7,6 +7,8 @@ use App\ShopType;
 use App\Address;
 use App\User;
 use App\Attachment;
+use App\View;
+
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -25,6 +27,7 @@ class ShopController extends Controller
 
         foreach ($shops as $shop) {
             $shop->attachments;
+            $shop['total_views'] = $shop->totalViews();
         }
         return response()->json($shops);
     }
@@ -33,7 +36,6 @@ class ShopController extends Controller
     {
 
         $user = Auth::user();
-        // $user = User::find(1);
         $shop = $user->shop;
 
         $shop['shop_owner'] = $user->name;
@@ -43,6 +45,8 @@ class ShopController extends Controller
         $shop['name'] = strtoupper($shop->name);
 
         $shop->attachments;
+        $shop['total_views'] = $shop->totalViews();
+
 
         foreach ($shop['attachments'] as $attachment) {
 
@@ -143,6 +147,20 @@ class ShopController extends Controller
             $shop["total_reviews"] = count($reviews);
         }
         $shop["key"] = $shop->id;
+
+        $user_id = 1;
+
+        $shop['total_views'] = $shop->totalViews();
+
+        if (Auth::check()) {
+            $user_id = Auth::id();
+        }
+
+        View::create([
+            "user_id" => $user_id,
+            "parent_id" => $shop->id,
+            "type" => "shop"
+        ]);
 
         return response()->json($shop);
     }

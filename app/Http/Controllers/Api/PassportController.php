@@ -46,8 +46,8 @@ class PassportController extends Controller
             'password' => $request->password
         ];
 
-        if (auth()->attempt($credentials)) {
-            $token = auth()->user()->createToken($request->email)->accessToken;
+        if (auth()->guard('web')->attempt($credentials)) {
+            $token = auth()->guard('web')->user()->createToken($request->email)->accessToken;
             return response()->json(['token' => $token], 200);
         } else {
             return response()->json(['error' => 'UnAuthorised'], 401);

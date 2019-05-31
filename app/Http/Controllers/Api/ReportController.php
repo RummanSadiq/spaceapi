@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Report;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 class ReportController extends Controller
 {
@@ -14,7 +17,7 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Report::all());
     }
 
     /**
@@ -27,6 +30,50 @@ class ReportController extends Controller
         //
     }
 
+
+    public function productStore(Request $request)
+    {
+        $request['type'] = "product";
+        $this->store($request);
+    }
+
+    public function postStore(Request $request)
+    {
+        $request['type'] = "post";
+        $this->store($request);
+    }
+
+    public function userStore(Request $request)
+    {
+        $request['type'] = "user";
+        $this->store($request);
+    }
+
+    public function shopStore(Request $request)
+    {
+        $request['type'] = "shop";
+        $this->store($request);
+    }
+
+    public function faqStore(Request $request)
+    {
+        $request['type'] = "faq";
+        $this->store($request);
+    }
+
+    public function conversationStore(Request $request)
+    {
+        $request['type'] = "conversation";
+        $this->store($request);
+    }
+
+    public function reviewStore(Request $request)
+    {
+        $request['type'] = "review";
+        $this->store($request);
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +82,12 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $request['user_id'] = $user->id;
+
+        $report = Report::create($request->all());
+
+        return response()->json($report, 201);
     }
 
     /**

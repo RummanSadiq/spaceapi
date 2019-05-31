@@ -6,6 +6,8 @@ use App\Product;
 use App\Category;
 use App\Shop;
 use App\Attachment;
+use App\View;
+
 
 
 use Illuminate\Support\Facades\DB;
@@ -30,38 +32,44 @@ class ProductController extends Controller
     private function modifyProducts($products)
     {
         foreach ($products as $prod) {
-            $prod['shop_name'] = Shop::find($prod->shop_id)->name;
-            $prod['category_name'] = Category::find($prod->category_id)->name;
-
-            $prod->attachments;
-
-            foreach ($prod['attachments'] as $attachment) {
-
-                $attachment['status'] = 'Done';
-                $attachment['uid'] = $attachment['id'];
-            }
-
-
-            $reviews = $prod->reviews;
-            if (count($reviews) > 0) {
-
-                $total = 0;
-                $noOfReviews = 0;
-
-                foreach ($reviews as $rev) {
-                    $total += $rev['rating'];
-                    $noOfReviews++;
-                    $rev->user;
-                }
-
-
-                $prod["avg_rating"] = $total / $noOfReviews;
-                $prod["total_reviews"] = count($reviews);
-            }
-            $prod["key"] = $prod->id;
+            $this->modifyProduct($prod);
         }
 
         return $products;
+    }
+
+    private function modifyProduct($prod)
+    {
+        $prod['shop_name'] = Shop::find($prod->shop_id)->name;
+        $prod['category_name'] = Category::find($prod->category_id)->name;
+
+        $prod->attachments;
+        $prod['total_views'] = $prod->totalViews();
+
+        foreach ($prod['attachments'] as $attachment) {
+
+            $attachment['status'] = 'Done';
+            $attachment['uid'] = $attachment['id'];
+        }
+
+
+        $reviews = $prod->reviews;
+        if (count($reviews) > 0) {
+
+            $total = 0;
+            $noOfReviews = 0;
+
+            foreach ($reviews as $rev) {
+                $total += $rev['rating'];
+                $noOfReviews++;
+                $rev->user;
+            }
+
+
+            $prod["avg_rating"] = $total / $noOfReviews;
+            $prod["total_reviews"] = count($reviews);
+        }
+        $prod["key"] = $prod->id;
     }
 
 
@@ -135,19 +143,8 @@ class ProductController extends Controller
     {
         $shop = Shop::find($shop_id);
         $products = $shop->products->reverse()->values();
-        foreach ($products as $prod) {
-            $prod["key"] = $prod->id;
-            $prod["category"] = Category::find($prod->category_id)->name;
 
-            $prod->attachments;
-
-            foreach ($prod['attachments'] as $attachment) {
-
-                $attachment['status'] = 'Done';
-                $attachment['uid'] = $attachment['id'];
-            }
-        }
-        return response()->json($products);
+        return response()->json($this->modifyProducts($products));
     }
     /**
      * Show the form for creating a new resource.
@@ -199,33 +196,20 @@ class ProductController extends Controller
     public function show($product_id)
     {
         $product = Product::findOrFail($product_id);
-        $shop = $product->shop;
-        $shop->user;
-        $shop->address;
-        $reviews = $product->reviews;
 
-        $product->attachments;
+        $this->modifyProduct($product);
 
-        if (count($reviews) > 0) {
+        $user_id = 1;
 
-            $total = 0;
-            $noOfReviews = 0;
-
-            foreach ($reviews as $rev) {
-                $rev->attachments;
-                $total += $rev['rating'];
-                $noOfReviews++;
-                $rev->user;
-            }
-
-
-            $product["avg_rating"] = $total / $noOfReviews;
-            $product["total_reviews"] = count($reviews);
+        if (Auth::check()) {
+            $user_id = Auth::id();
         }
-        $product["key"] = $product->id;
 
-        $product["category"] = Category::find($product->category_id)->name;
-
+        View::create([
+            "user_id" => $user_id,
+            "parent_id" => $product->id,
+            "type" => "product"
+        ]);
         return response()->json($product);
     }
 

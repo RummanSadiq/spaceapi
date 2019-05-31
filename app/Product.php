@@ -33,6 +33,11 @@ class Product extends Model
         return $this->belongsTo('App\Category');
     }
 
+    public function views()
+    {
+        return $this->hasMany('App\View', 'parent_id')->where('type', 'product');
+    }
+
     public function attachments()
     {
         return $this->hasMany('App\Attachment', 'parent_id')->where('type', 'product');
@@ -41,5 +46,10 @@ class Product extends Model
     public function reviews()
     {
         return $this->hasMany('App\Review', 'parent_id')->where('type', 'product');
+    }
+
+    public function totalViews()
+    {
+        return $this->views->count();
     }
 }

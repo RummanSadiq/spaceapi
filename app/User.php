@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -50,6 +50,11 @@ class User extends Authenticatable
     public function reviews()
     {
         return $this->hasMany('App\Review');
+    }
+
+    public function views()
+    {
+        return $this->hasMany('App\View');
     }
 
     // public function productReviews()
