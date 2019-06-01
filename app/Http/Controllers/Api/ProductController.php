@@ -7,7 +7,7 @@ use App\Category;
 use App\Shop;
 use App\Attachment;
 use App\View;
-
+use App\Notification;
 
 
 use Illuminate\Support\Facades\DB;
@@ -126,6 +126,9 @@ class ProductController extends Controller
 
     public function setDiscount(Request $request)
     {
+
+        $prod = "";
+        $disc = "";
         foreach ($request['products'] as $id) {
             $product = Product::findOrFail($id);
             $product->update([
@@ -133,7 +136,25 @@ class ProductController extends Controller
                 "sale_starts_at" => now(),
                 "sale_ends_at" => $request['sale_ends_at']
             ]);
+            $prod = $id;
+            $disc = $request['percent'];
         }
+
+        $notifications = array();
+        $followers = $prod->shop->followers;
+
+        foreach ($followers as $follower) {
+            array_push($notifications, [
+                "receiver_id" => $follower->user_id,
+                "receiver_type" => "user",
+                "parent_id" => $id,
+                "parent_type" => "product",
+                "description" => "products are on SALE, avail " . $disc . "% discount now.",
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+        Notification::insert($notifications);
     }
 
 
@@ -183,6 +204,23 @@ class ProductController extends Controller
                 'type' => 'product'
             ]);
         }
+
+        $notifications = array();
+        $followers = $shop->followers;
+
+        foreach ($followers as $follower) {
+            array_push($notifications, [
+                "receiver_id" => $follower->user_id,
+                "receiver_type" => "user",
+                "parent_id" => $product->id,
+                "parent_type" => "product",
+                "description" => "added a new product.",
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+        Notification::insert($notifications);
+
 
         return response()->json($product, 201);
     }

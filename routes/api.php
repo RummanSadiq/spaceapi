@@ -38,6 +38,7 @@ Route::middleware('json.response')->group(function () {
         Route::get('/myviews', 'Api\ViewController@myViews');
 
         //Shop Followers
+        Route::get('/myfollowers', 'Api\ShopFollowerController@myFollowers');
         Route::get('/follow/{id}', 'Api\ShopFollowerController@follow');
         Route::get('/followed', 'Api\ShopFollowerController@index');
 
@@ -98,6 +99,12 @@ Route::middleware('json.response')->group(function () {
         //Conversations
         Route::get('/conversations/shop', 'Api\ConversationController@shopConversations');
         Route::get('/conversations/customer', 'Api\ConversationController@customerConversations');
+
+        //Notifications
+        Route::get('/notifications/user', 'Api\NotificationController@userIndex');
+        Route::get('/notifications/shop', 'Api\NotificationController@shopIndex');
+        Route::get('/notifications/admin', 'Api\NotificationController@adminIndex');
+        Route::post('/notifications/{id}', 'Api\NotificationController@setRead');
     });
 
     //Unauthenticated APIs

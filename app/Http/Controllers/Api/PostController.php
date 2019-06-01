@@ -7,6 +7,8 @@ use App\User;
 use App\Shop;
 use App\View;
 use App\Attachment;
+use App\Notification;
+
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -111,6 +113,23 @@ class PostController extends Controller
                 'type' => 'post'
             ]);
         }
+
+        $notifications = array();
+        $followers = $shop->followers;
+
+        foreach ($followers as $follower) {
+            array_push($notifications, [
+                "receiver_id" => $follower->user_id,
+                "receiver_type" => "user",
+                "parent_id" => $post->id,
+                "parent_type" => "post",
+                "description" => "added a new post.",
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+        Notification::insert($notifications);
+
 
 
         return response()->json($post, 201);

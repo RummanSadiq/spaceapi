@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Notification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class NotificationController extends Controller
@@ -14,9 +16,19 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function userIndex()
     {
-        //
+        return response()->json(Auth::user()->notifications);
+    }
+
+    public function shopIndex()
+    {
+        return response()->json(Auth::user()->shop->notifications);
+    }
+
+    public function adminIndex()
+    {
+        return response()->json(Notification::where('receiver_type', 'admin')->get());
     }
 
     /**
@@ -69,6 +81,15 @@ class NotificationController extends Controller
      * @param  \App\Notification  $notification
      * @return \Illuminate\Http\Response
      */
+
+    public function setRead($id)
+    {
+        $notification = Notification::findOrFail($id);
+        $notification->update(["is_read" => 1]);
+        return response()->json($notification, 201);
+    }
+
+
     public function update(Request $request, Notification $notification)
     {
         //

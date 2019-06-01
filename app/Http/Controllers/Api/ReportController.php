@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Report;
+use App\Notification;
+
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +89,16 @@ class ReportController extends Controller
         $request['user_id'] = $user->id;
 
         $report = Report::create($request->all());
+
+        Notification::create([
+            "receiver_id" => 0,
+            "receiver_type" => "admin",
+            "parent_id" => $report->id,
+            "parent_type" => "report",
+            "description" => "A new report has been generated about a " . $request['type'],
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
         return response()->json($report, 201);
     }

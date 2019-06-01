@@ -16,15 +16,16 @@ class CreateNotificationsTable extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('receiver_id')->unsigned();
+            $table->string('receiver_type'); //User, Shop, Super Admin
 
             $table->integer('parent_id')->unsigned();
+            $table->string('parent_type');
 
-            $table->string('url');
-            $table->string('type'); //shop or customer or admin
+            $table->string('url')->nullable();
 
-            $table->boolean('is_read')->nullable();
+
+            $table->boolean('is_read')->default(0);
 
             $table->boolean('is_active')->default(1);
 

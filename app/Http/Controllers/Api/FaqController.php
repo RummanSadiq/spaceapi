@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Faq;
 use App\Shop;
+use App\Notification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,25 @@ class FaqController extends Controller
         $shop = $user->shop;
         $request['shop_id'] = $shop->id;
         $faq = Faq::create($request->all());
+
+        $notifications = array();
+
+        $followers = $shop->followers;
+
+        foreach ($followers as $follower) {
+            array_push($notifications, [
+                "receiver_id" => $follower->user_id,
+                "receiver_type" => "user",
+                "parent_id" => $faq->id,
+                "parent_type" => "faq",
+                "description" => "added a new FAQ",
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+
+        Notification::insert($notifications);
+
         return response()->json($faq, 201);
     }
 

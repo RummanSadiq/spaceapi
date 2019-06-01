@@ -62,9 +62,14 @@ class User extends Authenticatable
     //     return $this->hasMany('App\ProductReview');
     // }
 
-    public function shopFollowers()
+    public function follows()
     {
         return $this->hasMany('App\ShopFollower');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification', 'receiver_id')->where('receiver_type', 'user');
     }
 
     // public function firstParticipantConversations()

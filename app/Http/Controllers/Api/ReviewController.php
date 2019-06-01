@@ -7,6 +7,8 @@ use App\User;
 use App\Attachment;
 use App\Product;
 use App\Shop;
+use App\Notification;
+
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -133,10 +135,24 @@ class ReviewController extends Controller
                 'type' => 'review'
             ]);
         }
+
+        $shop_id = $request['parent_id'];
+
+        if ($request['type'] === "product") {
+            $shop_id = Product::findOrFail($request['parent_id'])->shop->id;
+        }
+
+        Notification::create([
+            "receiver_id" => $shop_id,
+            "receiver_type" => "shop",
+            "parent_id" => $user->id,
+            "parent_type" => "user",
+            "description" => "has added a review for your " . $request['type'],
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
         return response()->json($review, 201);
-
-
-        // return response()->json("Unable to add review");
     }
 
     /**

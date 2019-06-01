@@ -55,6 +55,11 @@ class Shop extends Model
         return $this->hasMany('App\View', 'parent_id')->where('type', 'shop');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification', 'receiver_id')->where('receiver_type', 'shop');
+    }
+
     public function promotion()
     {
         return $this->hasOne('App\Promotion');
@@ -65,9 +70,14 @@ class Shop extends Model
         return $this->belongsTo('App\ShopType');
     }
 
-    public function shopFollowers()
+    public function followers()
     {
         return $this->hasMany('App\ShopFollower');
+    }
+
+    public function totalFollowers()
+    {
+        return $this->followers->count();
     }
 
     public function reviews()

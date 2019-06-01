@@ -8,6 +8,8 @@ use App\Address;
 use App\User;
 use App\Attachment;
 use App\View;
+use App\Notification;
+
 
 
 use Illuminate\Http\Request;
@@ -28,6 +30,7 @@ class ShopController extends Controller
         foreach ($shops as $shop) {
             $shop->attachments;
             $shop['total_views'] = $shop->totalViews();
+            $shop['total_followers'] = $shop->totalfollowers();
         }
         return response()->json($shops);
     }
@@ -46,7 +49,7 @@ class ShopController extends Controller
 
         $shop->attachments;
         $shop['total_views'] = $shop->totalViews();
-
+        $shop['total_followers'] = $shop->totalfollowers();
 
         foreach ($shop['attachments'] as $attachment) {
 
@@ -145,6 +148,7 @@ class ShopController extends Controller
 
             $shop["avg_rating"] = $total / $noOfReviews;
             $shop["total_reviews"] = count($reviews);
+            $shop['total_followers'] = $shop->totalfollowers();
         }
         $shop["key"] = $shop->id;
 
@@ -199,8 +203,6 @@ class ShopController extends Controller
             'city' => $request->input('city'),
             'country' => $request->input('country')
         ]);
-
-
 
         unset($request['address']);
         unset($request['latitude']);
