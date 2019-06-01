@@ -134,7 +134,7 @@ Route::middleware('json.response')->group(function () {
 
     //Products
     Route::get('/products', 'Api\ProductController@index');
-    Route::post('/products', 'Api\ProductController@getFiltered');
+    Route::post('/products/search', 'Api\ProductController@getFiltered');
     Route::get('/products/shop/{id}', 'Api\ProductController@getShopProducts');
     Route::get('/products/{id}', 'Api\ProductController@show');
 
