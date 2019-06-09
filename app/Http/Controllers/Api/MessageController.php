@@ -53,7 +53,7 @@ class MessageController extends Controller
         // Required parameters are (conversation_id, text)
         $conversation = Conversation::findOrFail($request['conversation_id']);
 
-        if ($this->user_id == $request['user_id'] || $this->user_id == $request['shop_owner_id']) {
+        if ($this->user_id == $conversation->user_id || $this->user_id == $conversation->shop_owner_id) {
 
             $request['sender_id'] = $this->user_id;
 
@@ -80,7 +80,11 @@ class MessageController extends Controller
 
             $conversation = Conversation::firstOrCreate([
                 "user_id" => $this->user_id,
-                "shop_owner_id" => $request['shop_owner_id'],
+                "shop_owner_id" => $request['shop_owner_id']
+            ]);
+
+            $conversation->update([
+                "last_sender_id" => $this->user_id,
                 "last_message" => $request['text']
             ]);
 
@@ -102,23 +106,25 @@ class MessageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // public function show($id)
-    // {
-    //     $user = Auth::user();
-    //     // $user = User::find(1);
-    //     $conversation = Conversation::find($id);
-    //     $messages = $conversation->messages;
+    public function show($id)
+    {
+        $conversation = Conversation::find($id);
 
-    //     foreach ($messages as $msg) {
-    //         if ($msg['sender_id'] == $user->id) {
-    //             $msg['sender'] = 'true';
-    //         } else {
-    //             $msg['receiver'] = 'true';
-    //         }
-    //     }
+        if ($this->user_id == $conversation->user_id || $this->user_id == $conversation->shop_owner_id) {
 
-    //     return response()->json($messages);
-    // }
+            $messages = $conversation->messages;
+
+            foreach ($messages as $msg) {
+                if ($msg['sender_id'] == $this->user_id) {
+                    $msg['sender'] = 'true';
+                } else {
+                    $msg['receiver'] = 'true';
+                }
+            }
+
+            return response()->json($messages);
+        }
+    }
 
     /**
      * Show the form for editing the specified resource.

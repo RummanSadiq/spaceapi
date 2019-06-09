@@ -91,7 +91,7 @@ Route::middleware('json.response')->group(function () {
 
         //Messages
         // Route::get('/messages', 'Api\MessageController@index');
-        // Route::get('/messages/{id}', 'Api\MessageController@show');
+        Route::get('/messages/{id}', 'Api\MessageController@show');
         // Route::post('/messages/shop', 'Api\MessageController@shopSent');
         // Route::post('/messages/customer', 'Api\MessageController@customerSent');
         Route::post('/messages', 'Api\MessageController@store');

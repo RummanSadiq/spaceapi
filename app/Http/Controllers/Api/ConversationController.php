@@ -24,13 +24,11 @@ class ConversationController extends Controller
     public function shopConversations()
     {
 
-        // $user = User::find(1);
         $user = Auth::user();
 
-        $userid = $user->id;
-        $conversations = $user->shopConversations();
+        $conversations = $user->shopConversations;
 
-        $conversations = $this->addFields($conversations, $userid);
+        $conversations = $this->addFields($conversations, $user);
 
         return response()->json($conversations);
     }
@@ -39,30 +37,22 @@ class ConversationController extends Controller
     {
         $user = Auth::user();
 
-        $userid = $user->id;
-        $conversations = $user->customerConversations();
+        $conversations = $user->customerConversations;
 
-        $conversations = $this->addFields($conversations, $userid);
+        $conversations = $this->addFields($conversations, $user);
 
         return response()->json($conversations);
     }
 
-    private function addFields($conversations, $userid)
+    private function addFields($conversations, $user)
     {
         foreach ($conversations as $con) {
 
-            $first_participant = User::find($con['first_participant_id']);
-            $second_participant = User::find($con['second_participant_id']);
+            $con['username'] = $user->name;
 
-            if ($first_participant->id != $userid) {
-                $con['username'] = $first_participant->name;
-            } else {
-                $con['username'] = $second_participant->name;
-            }
-
-            if ($con['last_sender_id'] == $userid) {
+            if ($con['last_sender_id'] == $user->id) {
                 $con['prefix'] = "You: ";
-                $con['read'] = '1';
+                // $con['read'] = '1';
             } else {
                 $con['prefix'] = "";
             }

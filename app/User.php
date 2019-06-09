@@ -72,25 +72,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Notification', 'receiver_id')->where('receiver_type', 'user');
     }
 
-    // public function firstParticipantConversations()
-    // {
-    //     return $this->hasMany('App\Conversation', 'first_participant_id');
-    // }
+    public function shopConversations()
+    {
+        return $this->hasMany('App\Conversation', 'shop_owner_id');
+    }
 
-    // public function secondParticipantConversations()
-    // {
-    //     return $this->hasMany('App\Conversation', 'second_participant_id');
-    // }
-
-    // public function shopConversations()
-    // {
-    //     return $this->firstParticipantConversations->where('first_participant_type', '1')
-    //         ->merge($this->secondParticipantConversations->where('second_participant_type', '1'));
-    // }
-
-    // public function customerConversations()
-    // {
-    //     return $this->firstParticipantConversations->where('first_participant_type', '0')
-    //         ->merge($this->secondParticipantConversations->where('second_participant_type', '0'));
-    // }
+    public function customerConversations()
+    {
+        return $this->hasMany('App\Conversation', 'user_id');
+    }
 }
