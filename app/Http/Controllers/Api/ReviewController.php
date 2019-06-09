@@ -127,13 +127,15 @@ class ReviewController extends Controller
 
         $review = Review::create($request->all());
 
-        foreach ($attachments as $attachment) {
-            Attachment::create([
-                'name' => $attachment['name'],
-                'url' => $attachment['response']['url'],
-                'parent_id' => $review->id,
-                'type' => 'review'
-            ]);
+        if ($attachments) {
+            foreach ($attachments as $attachment) {
+                Attachment::create([
+                    'name' => $attachment['name'],
+                    'url' => $attachment['response']['url'],
+                    'parent_id' => $review->id,
+                    'type' => 'review'
+                ]);
+            }
         }
 
         $shop_id = $request['parent_id'];
@@ -142,15 +144,14 @@ class ReviewController extends Controller
             $shop_id = Product::findOrFail($request['parent_id'])->shop->id;
         }
 
-        Notification::create([
-            "receiver_id" => $shop_id,
+        $data = [
+            "receiver_id" => (int)$shop_id,
             "receiver_type" => "shop",
             "parent_id" => $user->id,
             "parent_type" => "user",
-            "description" => "has added a review for your " . $request['type'],
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+            "description" => "has added a review for your " . $request['type']
+        ];
+        Notification::create($data);
 
         return response()->json($review, 201);
     }

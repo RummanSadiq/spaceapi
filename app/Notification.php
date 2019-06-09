@@ -11,6 +11,7 @@ class Notification extends Model
         'receiver_type',
         'parent_id',
         'parent_type',
+        'description',
         'url',
         'is_read',
         'is_active'
