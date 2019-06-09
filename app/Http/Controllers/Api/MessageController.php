@@ -13,14 +13,23 @@ use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
+
+    protected $user_id;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->user_id = Auth::id();
+    }
+
+
     public function index()
     {
-        $messages = Message::all();
+        //
     }
 
     /**
@@ -34,65 +43,57 @@ class MessageController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new message.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $request
      * @return \Illuminate\Http\Response
      */
-    public function shopSent(Request $request)
+    public function store(Request $request)
     {
-        $user_id = Auth::User()->id;
-        // $user_id = User::find(1)->id;
+        // Required parameters are (conversation_id, text)
+        $conversation = Conversation::findOrFail($request['conversation_id']);
 
-        $conversation = Conversation::find($request['conversation_id']);
+        if ($this->user_id == $request['user_id'] || $this->user_id == $request['shop_owner_id']) {
 
-        return $this->sentMessage($conversation, $request['text'], $user_id);
-    }
+            $request['sender_id'] = $this->user_id;
 
-    private function sentMessage($conversation, $text, $user_id)
-    {
+            $msg = Message::create($request->all());
 
-        $data = [
-            "last_sender_id" => $user_id,
-            "msg_read" => '0',
-            "last_message" => $text
+            $conversation->update([
+                "last_sender_id" => $this->user_id,
+                "last_message" => $request['text'],
+                "is_read" => 0
+            ]);
 
-        ];
+            return response()->json($msg, 200);
+        }
 
-        $conversation->update($data);
-
-        $msg = Message::create([
-            "sender_id" => $user_id,
-            "conversation_id" => $conversation->id,
-            "text" => $text
-        ]);
-
-        return response()->json($msg);
-    }
-
-    public function customerSent(Request $request)
-    {
-
-        //Fields required in the $request are 'participant_id', 'participant_type' => 0 for customer and 1 for shop, 'text'
-        $user_id = Auth::user()->id;
-        // $user_id = User::find(4)->id;
-
-        $data = [
-            "first_participant_id" => $user_id,
-            "second_participant_id" => $request['participant_id'],
-            "first_participant_type" => '0',
-            "second_participant_type" => $request['participant_type']
-        ];
-
-        $conversation = Conversation::firstOrCreate($data);
-
-        return $this->sentMessage($conversation, $request['text'], $user_id);
+        return response()->json("User is not a participant in the conversation", 401);
     }
 
 
-    public function dent(Request $request)
+    public function newMessage(Request $request)
     {
-        //
+        // Required parameters are (shop_owner_id, text)
+
+        if ($this->user_id != $request['shop_owner_id']) {
+
+            $conversation = Conversation::firstOrCreate([
+                "user_id" => $this->user_id,
+                "shop_owner_id" => $request['shop_owner_id'],
+                "last_message" => $request['text']
+            ]);
+
+            $msg = Message::create([
+                "conversation_id" => $conversation->id,
+                "sender_id" => $this->user_id,
+                "text" => $request['text']
+            ]);
+
+            return response()->json($msg, 200);
+        }
+
+        return response()->json("User can not start a conversation with itself", 401);
     }
 
     /**
@@ -101,23 +102,23 @@ class MessageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $user = Auth::user();
-        // $user = User::find(1);
-        $conversation = Conversation::find($id);
-        $messages = $conversation->messages;
+    // public function show($id)
+    // {
+    //     $user = Auth::user();
+    //     // $user = User::find(1);
+    //     $conversation = Conversation::find($id);
+    //     $messages = $conversation->messages;
 
-        foreach ($messages as $msg) {
-            if ($msg['sender_id'] == $user->id) {
-                $msg['sender'] = 'true';
-            } else {
-                $msg['receiver'] = 'true';
-            }
-        }
+    //     foreach ($messages as $msg) {
+    //         if ($msg['sender_id'] == $user->id) {
+    //             $msg['sender'] = 'true';
+    //         } else {
+    //             $msg['receiver'] = 'true';
+    //         }
+    //     }
 
-        return response()->json($messages);
-    }
+    //     return response()->json($messages);
+    // }
 
     /**
      * Show the form for editing the specified resource.

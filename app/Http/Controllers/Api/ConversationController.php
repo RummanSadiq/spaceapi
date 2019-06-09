@@ -31,46 +31,43 @@ class ConversationController extends Controller
         $conversations = $user->shopConversations();
 
         $conversations = $this->addFields($conversations, $userid);
-        
+
         return response()->json($conversations);
     }
 
     public function customerConversations()
     {
-
-        // $user = User::find(1);
         $user = Auth::user();
 
         $userid = $user->id;
         $conversations = $user->customerConversations();
-        
+
         $conversations = $this->addFields($conversations, $userid);
 
         return response()->json($conversations);
     }
 
-    private function addFields($conversations, $userid) 
+    private function addFields($conversations, $userid)
     {
-        foreach($conversations as $con) {
+        foreach ($conversations as $con) {
 
             $first_participant = User::find($con['first_participant_id']);
             $second_participant = User::find($con['second_participant_id']);
-            
-            if($first_participant->id != $userid) {
+
+            if ($first_participant->id != $userid) {
                 $con['username'] = $first_participant->name;
             } else {
                 $con['username'] = $second_participant->name;
             }
 
-            if($con['last_sender_id'] == $userid) {
+            if ($con['last_sender_id'] == $userid) {
                 $con['prefix'] = "You: ";
                 $con['read'] = '1';
             } else {
                 $con['prefix'] = "";
             }
-
         }
-        
+
         return $conversations;
     }
 

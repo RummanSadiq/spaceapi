@@ -91,10 +91,12 @@ Route::middleware('json.response')->group(function () {
 
         //Messages
         // Route::get('/messages', 'Api\MessageController@index');
-        Route::get('/messages/{id}', 'Api\MessageController@show');
-        Route::post('/messages/shop', 'Api\MessageController@shopSent'); //might not get used 
-        Route::post('/messages/customer', 'Api\MessageController@customerSent'); //might not get used
-        Route::delete('/messages/{id}', 'Api\MessageController@destroy'); //Delete chat with some user
+        // Route::get('/messages/{id}', 'Api\MessageController@show');
+        // Route::post('/messages/shop', 'Api\MessageController@shopSent');
+        // Route::post('/messages/customer', 'Api\MessageController@customerSent');
+        Route::post('/messages', 'Api\MessageController@store');
+        Route::post('/messages/new', 'Api\MessageController@newMessage');
+        Route::delete('/messages/{id}', 'Api\MessageController@destroy');
 
         //Conversations
         Route::get('/conversations/shop', 'Api\ConversationController@shopConversations');
