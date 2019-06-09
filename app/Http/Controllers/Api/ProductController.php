@@ -43,8 +43,9 @@ class ProductController extends Controller
         $prod['shop_name'] = Shop::find($prod->shop_id)->name;
         $prod['category_name'] = Category::find($prod->category_id)->name;
 
-        $prod->attachments;
         $prod['total_views'] = $prod->totalViews();
+        $prod->attachments;
+        $prod->shop;
 
         foreach ($prod['attachments'] as $attachment) {
 
