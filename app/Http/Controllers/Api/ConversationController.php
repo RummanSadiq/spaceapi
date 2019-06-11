@@ -51,7 +51,7 @@ class ConversationController extends Controller
             if ($type == "shop") {
                 $con['username'] = User::find($con->user_id)->name;
             } else if ($type == "customer") {
-                $con['username'] = $user->shop->name;
+                $con['username'] = User::find($con->shop_owner_id)->shop->name;
             }
 
             if ($con['last_sender_id'] == $user->id) {
