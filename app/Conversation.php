@@ -17,6 +17,11 @@ class Conversation extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function shopOwner()
+    {
+        return $this->belongsTo('App\User', 'shop_owner_id');
     }
 }

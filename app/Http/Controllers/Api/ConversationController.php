@@ -28,7 +28,7 @@ class ConversationController extends Controller
 
         $conversations = $user->shopConversations;
 
-        $conversations = $this->addFields($conversations, $user);
+        $conversations = $this->addFields($conversations, $user, "shop");
 
         return response()->json($conversations);
     }
@@ -39,20 +39,24 @@ class ConversationController extends Controller
 
         $conversations = $user->customerConversations;
 
-        $conversations = $this->addFields($conversations, $user);
+        $conversations = $this->addFields($conversations, $user, "customer");
 
         return response()->json($conversations);
     }
 
-    private function addFields($conversations, $user)
+    private function addFields($conversations, $user, $type)
     {
         foreach ($conversations as $con) {
 
-            $con['username'] = $user->name;
+            if ($type == "shop") {
+                $con['username'] = User::find($con->user_id)->name;
+            } else if ($type == "customer") {
+                $con['username'] = $user->shop->name;
+            }
 
             if ($con['last_sender_id'] == $user->id) {
                 $con['prefix'] = "You: ";
-                // $con['read'] = '1';
+                $con['read'] = '1';
             } else {
                 $con['prefix'] = "";
             }
