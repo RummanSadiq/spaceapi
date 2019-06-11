@@ -112,7 +112,7 @@ class MessageController extends Controller
 
         if ($this->user_id == $conversation->user_id || $this->user_id == $conversation->shop_owner_id) {
 
-            $messages = $conversation->messages;
+            $messages = $conversation->messages->sort()->values()->all();
 
             foreach ($messages as $msg) {
                 if ($msg['sender_id'] == $this->user_id) {
