@@ -61,6 +61,7 @@ class MessageController extends Controller
             $msg = Message::create($request->all());
 
             broadcast(new NewMessage($msg));
+
             $conversation->update([
                 "last_sender_id" => $this->user_id,
                 "last_message" => $request['text'],
