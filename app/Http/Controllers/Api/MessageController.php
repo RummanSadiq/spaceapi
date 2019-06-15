@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Message;
 use App\Conversation;
 use App\User;
+use App\Events\NewMessage;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -59,6 +60,7 @@ class MessageController extends Controller
 
             $msg = Message::create($request->all());
 
+            broadcast(new NewMessage($msg));
             $conversation->update([
                 "last_sender_id" => $this->user_id,
                 "last_message" => $request['text'],
