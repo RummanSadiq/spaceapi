@@ -15,6 +15,5 @@ use App\Conversation;
 
 Broadcast::channel('message.{id}', function ($user, $id) {
     $con = Conversation::findOrFail($id);
-    // return $user->id == $con->user_id || $user->id == $con->shop_owner_id;
-    return true;
+    return $user->id == $con->user_id || $user->id == $con->shop_owner_id;
 });
