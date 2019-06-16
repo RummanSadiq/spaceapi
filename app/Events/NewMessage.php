@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -23,7 +22,7 @@ class NewMessage implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Message $message, $type, $receiver_id)
+    public function __construct($message, $type, $receiver_id)
     {
         $this->message = $message;
         $this->type = $type;
