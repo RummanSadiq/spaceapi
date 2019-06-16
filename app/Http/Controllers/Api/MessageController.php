@@ -71,6 +71,12 @@ class MessageController extends Controller
 
             $msg = Message::create($request->all());
 
+            if ($msg['sender_id'] == $this->user_id) {
+                $msg['sender'] = 'true';
+            } else {
+                $msg['receiver'] = 'true';
+            }
+
             broadcast(new NewMessage($msg, $type, $receiver_id));
 
             $conversation->update([
