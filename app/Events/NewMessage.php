@@ -16,14 +16,18 @@ class NewMessage implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $type;
+    public $receiver_id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Message $message)
+    public function __construct(Message $message, $type, $receiver_id)
     {
         $this->message = $message;
+        $this->type = $type;
+        $this->receiver_id = $receiver_id;
     }
 
     /**
@@ -33,7 +37,7 @@ class NewMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('messages.' .  $this->message->conversation_id);
+        return new PrivateChannel('messages.' . $this->type . '.' .  $this->receiver_id);
     }
 
     public function broadcastWith()

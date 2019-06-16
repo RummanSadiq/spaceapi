@@ -58,9 +58,20 @@ class MessageController extends Controller
 
             $request['sender_id'] = $this->user_id;
 
+            $type = null;
+            $receiver_id = null;
+
+            if ($this->user_id == $conversation->user_id) {
+                $type = "shop";
+                $receiver_id = $conversation->shop_owner_id;
+            } else {
+                $type = "customer";
+                $receiver_id = $conversation->user_id;
+            }
+
             $msg = Message::create($request->all());
 
-            broadcast(new NewMessage($msg));
+            broadcast(new NewMessage($msg, $type, $receiver_id));
 
             $conversation->update([
                 "last_sender_id" => $this->user_id,
