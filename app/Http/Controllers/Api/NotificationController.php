@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Notification;
+use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +59,11 @@ class NotificationController extends Controller
                 $notification['url'] = "/product/" . $notification['parent_id'];
             } else if ($notification['parent_type'] === "post") {
 
-                $notification['url'] = "/store/" . Post::findOrFail($notification['parent_id'])->shop->id;
+                $post = Post::find($notification['parent_id']);
+                if ($post) {
+
+                    $notification['url'] = "/store/" . $post->shop->id;
+                }
             } else if ($notification['parent_type'] === "user") {
 
                 $notification['url'] = "/reviews";
