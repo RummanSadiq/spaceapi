@@ -123,7 +123,7 @@ class PostController extends Controller
                 "receiver_type" => "user",
                 "parent_id" => $post->id,
                 "parent_type" => "post",
-                "description" => "added a new post.",
+                "description" => $shop->name . " added a new post.",
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

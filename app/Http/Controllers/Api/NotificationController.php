@@ -18,17 +18,59 @@ class NotificationController extends Controller
      */
     public function userIndex()
     {
-        return response()->json(Auth::user()->notifications);
+        // title: "Title of notification",
+        // message: "You have received a particular type of notiification that will be showed up here",
+        // link: "/product/2",
+        // read: true
+
+
+        /**
+         *"description" => $shop->name . " added a new FAQ",
+         *"description" => $user->name . " has added a review for your " . $request['type']
+         *"description" => $shop->name . " added a new post.",
+         *"description" => $shop->name . " products are on SALE, avail " . $disc . "% discount now.",
+         *"description" => $shop->name . " added a new product.",
+         *"description" => "A new report has been generated for a " . $request['type'] . " by " . $user->name,
+         *"description" => $user->name . " is now following your shop",
+         * 
+         * 
+         * 
+         */
+
+        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'user')->get()));
     }
 
     public function shopIndex()
     {
-        return response()->json(Auth::user()->shop->notifications);
+        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'shop')->get()));
     }
 
     public function adminIndex()
     {
-        return response()->json(Notification::where('receiver_type', 'admin')->get());
+        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'admin')->get()));
+    }
+
+    private function modifyResponse($notifications)
+    {
+        foreach ($notifications as $notification) {
+            if ($notification['parent_type'] === "product") {
+
+                $notification['url'] = "/product/" . $notification['parent_id'];
+            } else if ($notification['parent_type'] === "post") {
+
+                $notification['url'] = "/store/" . Post::findOrFail($notification['parent_id'])->shop->id;
+            } else if ($notification['parent_type'] === "user") {
+
+                $notification['url'] = "/reviews";
+            } else if ($notification['parent_type'] === "report") {
+
+                $notification['url'] = "/reports";
+            } else if ($notification['parent_type'] === "report") {
+
+                $notification['url'] = "/reports";
+            }
+        }
+        return $notifications;
     }
 
     /**

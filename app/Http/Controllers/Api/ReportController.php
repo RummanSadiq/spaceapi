@@ -95,7 +95,7 @@ class ReportController extends Controller
             "receiver_type" => "admin",
             "parent_id" => $report->id,
             "parent_type" => "report",
-            "description" => "A new report has been generated about a " . $request['type'],
+            "description" => "A new report has been generated for a " . $request['type'] . " by " . $user->name,
             'created_at' => now(),
             'updated_at' => now()
         ]);

@@ -128,6 +128,9 @@ class ProductController extends Controller
     public function setDiscount(Request $request)
     {
 
+        $user = Auth::user();
+        $shop = $user->shop;
+
         $prod = "";
         $disc = "";
         foreach ($request['products'] as $id) {
@@ -150,11 +153,12 @@ class ProductController extends Controller
                 "receiver_type" => "user",
                 "parent_id" => $id,
                 "parent_type" => "product",
-                "description" => "products are on SALE, avail " . $disc . "% discount now.",
+                "description" => $shop->name . " products are on SALE, avail " . $disc . "% discount now.",
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
         }
+
         Notification::insert($notifications);
     }
 
@@ -215,7 +219,7 @@ class ProductController extends Controller
                 "receiver_type" => "user",
                 "parent_id" => $product->id,
                 "parent_type" => "product",
-                "description" => "added a new product.",
+                "description" => $shop->name . " added a new product.",
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

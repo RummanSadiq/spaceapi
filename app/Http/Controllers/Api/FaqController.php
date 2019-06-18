@@ -69,7 +69,7 @@ class FaqController extends Controller
                 "receiver_type" => "user",
                 "parent_id" => $faq->id,
                 "parent_type" => "faq",
-                "description" => "added a new FAQ",
+                "description" => $shop->name . " added a new FAQ",
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

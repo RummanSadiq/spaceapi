@@ -149,7 +149,7 @@ class ReviewController extends Controller
             "receiver_type" => "shop",
             "parent_id" => $user->id,
             "parent_type" => "user",
-            "description" => "has added a review for your " . $request['type']
+            "description" => $user->name . " has added a review for your " . $request['type']
         ];
         Notification::create($data);
 

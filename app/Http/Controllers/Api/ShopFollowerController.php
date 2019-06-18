@@ -89,7 +89,7 @@ class ShopFollowerController extends Controller
                 "receiver_type" => "shop",
                 "parent_id" => $user->id,
                 "parent_type" => "user",
-                "description" => "is following your shop",
+                "description" => $user->name . " is now following your shop",
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
