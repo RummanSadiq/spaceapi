@@ -51,7 +51,7 @@ class UserController extends Controller
         if (Auth::user()->is_super_admin) {
 
             $user = User::find($id)->update([
-                "is_active", $status
+                "is_active" => $status
             ]);
             return response()->json($user);
         } else {

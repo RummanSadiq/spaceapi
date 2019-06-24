@@ -252,7 +252,7 @@ class ReviewController extends Controller
         if (Auth::user()->is_super_admin) {
 
             $review = Review::find($id)->update([
-                "is_active", $status
+                "is_active" => $status
             ]);
             return response()->json($review);
         } else {

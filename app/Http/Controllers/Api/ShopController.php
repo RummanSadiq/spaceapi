@@ -85,7 +85,7 @@ class ShopController extends Controller
         if (Auth::user()->is_super_admin) {
 
             $shop = Shop::find($id)->update([
-                "is_active", $status
+                "is_active" => $status
             ]);
             return response()->json($shop);
         } else {

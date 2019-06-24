@@ -151,7 +151,7 @@ class FaqController extends Controller
         if (Auth::user()->is_super_admin) {
 
             $faq = Faq::find($id)->update([
-                "is_active", $status
+                "is_active" => $status
             ]);
             return response()->json($faq);
         } else {
