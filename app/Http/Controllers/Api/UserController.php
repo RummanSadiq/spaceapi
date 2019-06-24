@@ -31,7 +31,7 @@ class UserController extends Controller
     public function all()
     {
         if (Auth::user()->is_super_admin) {
-            return response()->json(User::all());
+            return response()->json(User::with('reviews')->get());
         } else {
             return response()->json(401);
         }
