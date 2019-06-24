@@ -27,6 +27,41 @@ class UserController extends Controller
         }
     }
 
+    //Super Admin
+    public function all()
+    {
+        if (Auth::user()->is_super_admin) {
+            return response()->json(User::all());
+        } else {
+            return response()->json(401);
+        }
+    }
+    public function setInActive($id)
+    {
+        $this->setStatus($id, '0');
+    }
+
+    public function setActive($id)
+    {
+        $this->setStatus($id, '1');
+    }
+
+    private function setStatus($id, $status)
+    {
+        if (Auth::user()->is_super_admin) {
+
+            $user = User::find($id)->update([
+                "is_active", $status
+            ]);
+            return response()->json($user);
+        } else {
+            return response()->json(401);
+        }
+    }
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -95,6 +130,7 @@ class UserController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.

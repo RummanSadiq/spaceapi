@@ -107,6 +107,38 @@ Route::middleware('json.response')->group(function () {
         Route::get('/notifications/shop', 'Api\NotificationController@shopIndex');
         Route::get('/notifications/admin', 'Api\NotificationController@adminIndex');
         Route::post('/notifications/{id}', 'Api\NotificationController@setRead');
+
+
+
+
+        //Super Admin
+        Route::get('/users/all', 'Api\UserController@all');
+        Route::post('/users/active/{id}', 'Api\UserController@setActive');
+        Route::post('/users/inactive/{id}', 'Api\UserController@setInActive');
+
+        Route::get('/shops/all', 'Api\ShopController@all');
+        Route::post('/shops/active/{id}', 'Api\ShopController@setActive');
+        Route::post('/shops/inactive/{id}', 'Api\ShopController@setInActive');
+
+        Route::get('/products/all', 'Api\ProductController@all');
+        Route::post('/products/active/{id}', 'Api\ProductController@setActive');
+        Route::post('/products/inactive/{id}', 'Api\ProductController@setInActive');
+
+        Route::get('/posts/all', 'Api\PostController@all');
+        Route::post('/posts/active/{id}', 'Api\PostController@setActive');
+        Route::post('/posts/inactive/{id}', 'Api\PostController@setInActive');
+
+        Route::get('/faqs/all', 'Api\FaqController@all');
+        Route::post('/faqs/active/{id}', 'Api\FaqController@setActive');
+        Route::post('/faq/inactive/{id}', 'Api\FaqController@setInActive');
+
+        Route::get('/reviews/all', 'Api\ReviewController@all');
+        Route::post('/reviews/active/{id}', 'Api\ReviewController@setActive');
+        Route::post('/reviews/inactive/{id}', 'Api\ReviewController@setInActive');
+
+        Route::get('/reports/all', 'Api\ReportController@all');
+        Route::post('/reports/active/{id}', 'Api\ReportController@setActive');
+        Route::post('/reports/inactive/{id}', 'Api\ReportController@setInActive');
     });
 
     //Unauthenticated APIs

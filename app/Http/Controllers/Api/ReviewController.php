@@ -226,4 +226,37 @@ class ReviewController extends Controller
         $review = Review::find($id);
         $review->delete();
     }
+
+    //Super Admin
+    public function all()
+    {
+        if (Auth::user()->is_super_admin) {
+            return response()->json(Review::all());
+        } else {
+            return response()->json(401);
+        }
+    }
+
+    public function setInActive($id)
+    {
+        $this->setStatus($id, '0');
+    }
+
+    public function setActive($id)
+    {
+        $this->setStatus($id, '1');
+    }
+
+    private function setStatus($id, $status)
+    {
+        if (Auth::user()->is_super_admin) {
+
+            $review = Review::find($id)->update([
+                "is_active", $status
+            ]);
+            return response()->json($review);
+        } else {
+            return response()->json(401);
+        }
+    }
 }

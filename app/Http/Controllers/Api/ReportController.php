@@ -147,4 +147,37 @@ class ReportController extends Controller
     {
         //
     }
+
+    //Super Admin
+    public function all()
+    {
+        if (Auth::user()->is_super_admin) {
+            return response()->json(Report::all());
+        } else {
+            return response()->json(401);
+        }
+    }
+
+    public function setInActive($id)
+    {
+        $this->setStatus($id, '0');
+    }
+
+    public function setActive($id)
+    {
+        $this->setStatus($id, '1');
+    }
+
+    private function setStatus($id, $status)
+    {
+        if (Auth::user()->is_super_admin) {
+
+            $report = Report::find($id)->update([
+                "is_active", $status
+            ]);
+            return response()->json($report);
+        } else {
+            return response()->json(401);
+        }
+    }
 }

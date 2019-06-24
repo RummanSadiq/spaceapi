@@ -125,4 +125,37 @@ class FaqController extends Controller
         $faq = Faq::find($id);
         $faq->delete();
     }
+
+    //Super Admin
+    public function all()
+    {
+        if (Auth::user()->is_super_admin) {
+            return response()->json(Faq::all());
+        } else {
+            return response()->json(401);
+        }
+    }
+
+    public function setInActive($id)
+    {
+        $this->setStatus($id, '0');
+    }
+
+    public function setActive($id)
+    {
+        $this->setStatus($id, '1');
+    }
+
+    private function setStatus($id, $status)
+    {
+        if (Auth::user()->is_super_admin) {
+
+            $faq = Faq::find($id)->update([
+                "is_active", $status
+            ]);
+            return response()->json($faq);
+        } else {
+            return response()->json(401);
+        }
+    }
 }
