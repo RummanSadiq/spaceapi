@@ -42,11 +42,11 @@ class ShoppingListController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id, Request $request)
     {
         $item = ListItem::firstOrCreate([
             'user_id' => Auth::id(),
-            'product_id' => $request['product_id']
+            'product_id' => $id
         ]);
 
         $item->update([
@@ -56,9 +56,9 @@ class ShoppingListController extends Controller
         return response()->json($item, 200);
     }
 
-    public function remove(Request $request)
+    public function remove($id, Request $request)
     {
-        $item = ListItem::where('user_id', Auth::id())->where('product_id', $request['product_id'])->first();
+        $item = ListItem::where('user_id', Auth::id())->where('product_id', $id)->first();
 
         $item->update([
             'is_active' => 0
