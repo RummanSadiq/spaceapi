@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\ShoppingList;
+use App\ListItem;
+use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Auth;
+
 
 class ShoppingListController extends Controller
 {
@@ -15,7 +19,11 @@ class ShoppingListController extends Controller
      */
     public function index()
     {
-        //
+        $items = ListItem::where('user_id', Auth::id())->where('is_active', '1')->pluck('id')->toArray();
+
+        $products = Product::whereIn('id', $items)->get();
+
+        return response()->json($products);
     }
 
     /**
@@ -36,7 +44,27 @@ class ShoppingListController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $item = ListItem::firstOrCreate([
+            'user_id' => Auth::id(),
+            'product_id' => $request['product_id']
+        ]);
+
+        $item->update([
+            'is_active' => 1
+        ]);
+
+        return response()->json($item, 200);
+    }
+
+    public function remove(Request $request)
+    {
+        $item = ListItem::where('user_id', Auth::id())->where('product_id', $request['product_id'])->first();
+
+        $item->update([
+            'is_active' => 0
+        ]);
+
+        return response()->json($item);
     }
 
     /**

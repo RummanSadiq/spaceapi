@@ -101,15 +101,23 @@ Route::middleware('json.response')->group(function () {
         //Conversations
         Route::get('/conversations/shop', 'Api\ConversationController@shopConversations');
         Route::get('/conversations/customer', 'Api\ConversationController@customerConversations');
+        
+        
+        //Shopping List
+        Route::get('/shoppinglist', 'Api\ShoppingListController@index');
+        // Route::post('/shoppinglist/name', 'Api\ShoppingListController@setActive');
+        Route::post('/shoppinglist/add', 'Api\ShoppingListController@store');
+        Route::post('/shoppinglist/remove', 'Api\ShoppingListController@remove');
+
+
+
+
 
         //Notifications
         Route::get('/notifications/user', 'Api\NotificationController@userIndex');
         Route::get('/notifications/shop', 'Api\NotificationController@shopIndex');
         Route::get('/notifications/admin', 'Api\NotificationController@adminIndex');
         Route::post('/notifications/{id}', 'Api\NotificationController@setRead');
-
-
-
 
         //Super Admin
         Route::get('/users/all', 'Api\UserController@all');
