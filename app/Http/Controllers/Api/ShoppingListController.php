@@ -67,6 +67,29 @@ class ShoppingListController extends Controller
         return response()->json($item);
     }
 
+    public function toggle($id, Request $request)
+    {
+        $items = ListItem::where('user_id', Auth::id())->where('product_id', $id)->where('is_active', '1')->get();
+
+        if (count($items) > 0) {
+            $item = $items[0];
+            $item->update([
+                'is_active' => 0
+            ]);
+        } else {
+            $item = ListItem::firstOrCreate([
+                'user_id' => Auth::id(),
+                'product_id' => $id
+            ]);
+
+            $item->update([
+                'is_active' => 1
+            ]);
+        }
+
+        return response()->json($item);
+    }
+
     /**
      * Display the specified resource.
      *
