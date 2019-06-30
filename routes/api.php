@@ -109,9 +109,6 @@ Route::middleware('json.response')->group(function () {
         Route::post('/shoppinglist/remove', 'Api\ShoppingListController@remove');
 
 
-
-
-
         //Notifications
         Route::get('/notifications/user', 'Api\NotificationController@userIndex');
         Route::get('/notifications/shop', 'Api\NotificationController@shopIndex');

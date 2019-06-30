@@ -8,6 +8,7 @@ use App\Shop;
 use App\Attachment;
 use App\View;
 use App\Notification;
+use App\ListItem;
 
 
 use Illuminate\Support\Facades\DB;
@@ -243,6 +244,14 @@ class ProductController extends Controller
         $this->modifyProduct($product);
 
         $user_id = 1;
+
+        $item = ListItem::where('user_id', Auth::id())->where('is_active', '1')->where('product_id', $product_id)->get();
+
+        if (count($item) > 0) {
+            $product['added_to_list'] = 'true';
+        } else {
+            $product['added_to_list'] = 'false';
+        }
 
         if (Auth::check()) {
             $user_id = Auth::id();
