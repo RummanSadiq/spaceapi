@@ -19,7 +19,7 @@ class ShoppingListController extends Controller
      */
     public function index()
     {
-        $items = ListItem::where('user_id', Auth::id())->where('is_active', '1')->pluck('id')->toArray();
+        $items = ListItem::where('user_id', Auth::id())->where('is_active', '1')->pluck('product_id')->toArray();
 
         $products = Product::whereIn('id', $items)->get();
 
