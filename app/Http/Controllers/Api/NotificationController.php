@@ -54,6 +54,7 @@ class NotificationController extends Controller
     private function modifyResponse($notifications)
     {
         foreach ($notifications as $notification) {
+
             if ($notification['parent_type'] === "product") {
 
                 $notification['url'] = "/product/" . $notification['parent_id'];
@@ -70,9 +71,9 @@ class NotificationController extends Controller
             } else if ($notification['parent_type'] === "report") {
 
                 $notification['url'] = "/reports";
-            } else if ($notification['parent_type'] === "report") {
+            } else if ($notification['parent_type'] === "faq") {
 
-                $notification['url'] = "/reports";
+                $notification['url'] = "/faqs";
             }
         }
         return $notifications;
