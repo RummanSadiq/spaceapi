@@ -34,46 +34,46 @@ class ReportController extends Controller
     }
 
 
-    public function productStore(Request $request)
+    public function productStore(Request $request, $id)
     {
         $request['type'] = "product";
-        $this->store($request);
+        $this->store($request, $id);
     }
 
-    public function postStore(Request $request)
+    public function postStore(Request $request, $id)
     {
         $request['type'] = "post";
-        $this->store($request);
+        $this->store($request, $id);
     }
 
-    public function userStore(Request $request)
+    public function userStore(Request $request, $id)
     {
         $request['type'] = "user";
-        $this->store($request);
+        $this->store($request, $id);
     }
 
-    public function shopStore(Request $request)
+    public function shopStore(Request $request, $id)
     {
         $request['type'] = "shop";
-        $this->store($request);
+        $this->store($request, $id);
     }
 
-    public function faqStore(Request $request)
+    public function faqStore(Request $request, $id)
     {
         $request['type'] = "faq";
-        $this->store($request);
+        $this->store($request, $id);
     }
 
-    public function conversationStore(Request $request)
+    public function conversationStore(Request $request, $id)
     {
         $request['type'] = "conversation";
-        $this->store($request);
+        $this->store($request, $id);
     }
 
-    public function reviewStore(Request $request)
+    public function reviewStore(Request $request, $id)
     {
         $request['type'] = "review";
-        $this->store($request);
+        $this->store($request, $id);
     }
 
 
@@ -83,10 +83,11 @@ class ReportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $user = Auth::user();
         $request['user_id'] = $user->id;
+        $request['parent_id'] = $id;
 
         $report = Report::create($request->all());
 

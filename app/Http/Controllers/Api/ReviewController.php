@@ -90,6 +90,31 @@ class ReviewController extends Controller
         //
     }
 
+    public function upVote(Request $request, $id)
+    {
+        $this->vote($id, 1);
+    }
+
+    public function downVote(Request $request, $id)
+    {
+        $this->vote($id, -1);
+    }
+
+    private function vote($id, $no)
+    {
+        $review = Review::find($id);
+
+        $review->update([
+            'votes' => (int)$review->votes + $no
+        ]);
+
+        if ($review->votes < -3) {
+            $review->update([
+                'is_active' => 0
+            ]);
+        }
+    }
+
 
 
 

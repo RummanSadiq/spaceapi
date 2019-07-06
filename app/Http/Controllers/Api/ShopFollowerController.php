@@ -25,6 +25,12 @@ class ShopFollowerController extends Controller
 
         $shops = ShopFollower::where("user_id", $user->id)->get()->values();
 
+        foreach ($shops as $shop) {
+            $shop->attachments;
+            $shop['total_views'] = $shop->totalViews();
+            $shop['total_followers'] = $shop->totalfollowers();
+        }
+
         return response()->json($shops);
     }
 

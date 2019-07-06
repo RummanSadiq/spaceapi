@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\ListItem;
 use App\Product;
+use App\Shop;
+use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Facades\Auth;
 
 
@@ -23,7 +24,51 @@ class ShoppingListController extends Controller
 
         $products = Product::whereIn('id', $items)->get();
 
-        return response()->json($products);
+        return response()->json($this->modifyProducts($products));
+    }
+
+    private function modifyProducts($products)
+    {
+        foreach ($products as $prod) {
+            $this->modifyProduct($prod);
+        }
+
+        return $products;
+    }
+
+    private function modifyProduct($prod)
+    {
+        $prod['shop_name'] = Shop::find($prod->shop_id)->name;
+        $prod['category_name'] = Category::find($prod->category_id)->name;
+
+        $prod['total_views'] = $prod->totalViews();
+        $prod->attachments;
+        $prod->shop;
+
+        foreach ($prod['attachments'] as $attachment) {
+
+            $attachment['status'] = 'Done';
+            $attachment['uid'] = $attachment['id'];
+        }
+
+
+        $reviews = $prod->reviews;
+        if (count($reviews) > 0) {
+
+            $total = 0;
+            $noOfReviews = 0;
+
+            foreach ($reviews as $rev) {
+                $total += $rev['rating'];
+                $noOfReviews++;
+                $rev->user;
+            }
+
+
+            $prod["avg_rating"] = $total / $noOfReviews;
+            $prod["total_reviews"] = count($reviews);
+        }
+        $prod["key"] = $prod->id;
     }
 
     /**

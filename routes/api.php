@@ -76,18 +76,20 @@ Route::middleware('json.response')->group(function () {
         Route::get('/reviews/shops', 'Api\ReviewController@indexMyShop');
         Route::get('/reviews/products', 'Api\ReviewController@indexMyProduct');
         Route::post('/reviews/products', 'Api\ReviewController@productStore');
+        Route::post('/reviews/upvote/{id}', 'Api\ReviewController@upVote');
+        Route::post('/reviews/downvote/{id}', 'Api\ReviewController@downVote');
         Route::post('/reviews/shops', 'Api\ReviewController@shopStore');
         Route::post('/reviews/{id}', 'Api\ReviewController@update');
         Route::delete('/reviews/{id}', 'Api\ReviewController@destroy');
 
         //Report
-        Route::post('/reports/users', 'Api\ReportController@userStore');
-        Route::post('/reports/shops', 'Api\ReportController@shopStore');
-        Route::post('/reports/conversations', 'Api\ReportController@conversationStore');
-        Route::post('/reports/reviews', 'Api\ReportController@reviewStore');
-        Route::post('/reports/products', 'Api\ReportController@productStore');
-        Route::post('/reports/posts', 'Api\ReportController@postStore');
-        Route::post('/reports/faqs', 'Api\ReportController@faqStore');
+        Route::post('/reports/users/{id}', 'Api\ReportController@userStore');
+        Route::post('/reports/shops/{id}', 'Api\ReportController@shopStore');
+        Route::post('/reports/conversations/{id}', 'Api\ReportController@conversationStore');
+        Route::post('/reports/reviews/{id}', 'Api\ReportController@reviewStore');
+        Route::post('/reports/products/{id}', 'Api\ReportController@productStore');
+        Route::post('/reports/posts/{id}', 'Api\ReportController@postStore');
+        Route::post('/reports/faqs/{id}', 'Api\ReportController@faqStore');
 
         //Messages
         // Route::get('/messages', 'Api\MessageController@index');

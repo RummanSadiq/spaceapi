@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Category;
+use App\Shop;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -51,5 +53,50 @@ class Product extends Model
     public function totalViews()
     {
         return $this->views->count();
+    }
+
+
+    public function modifyProducts()
+    {
+        foreach ($this as $prod) {
+            $this->modifyProduct($prod);
+        }
+
+        return $this;
+    }
+
+    public function modifyProduct()
+    {
+        $this['shop_name'] = Shop::find($this->shop_id)->name;
+        $this['category_name'] = Category::find($this->category_id)->name;
+
+        $this['total_views'] = $this->totalViews();
+        $this->attachments;
+        $this->shop;
+
+        foreach ($this['attachments'] as $attachment) {
+
+            $attachment['status'] = 'Done';
+            $attachment['uid'] = $attachment['id'];
+        }
+
+
+        $reviews = $this->reviews;
+        if (count($reviews) > 0) {
+
+            $total = 0;
+            $noOfReviews = 0;
+
+            foreach ($reviews as $rev) {
+                $total += $rev['rating'];
+                $noOfReviews++;
+                $rev->user;
+            }
+
+
+            $this["avg_rating"] = $total / $noOfReviews;
+            $this["total_reviews"] = count($reviews);
+        }
+        $this["key"] = $this->id;
     }
 }
