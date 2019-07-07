@@ -12,6 +12,7 @@ class Address extends Model
 
     public function shop()
     {
+        //testing
         return $this->hasOne('App\Shop');
     }
 }
