@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/pulsespa/spaceapi
+    - export DEPLOYPATH=/home2/pulsespa/spaceapi
     - /bin/cp -r * $DEPLOYPATH
