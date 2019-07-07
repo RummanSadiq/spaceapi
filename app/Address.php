@@ -10,9 +10,9 @@ class Address extends Model
         "place", "latitude", "longitude", "zip", "city", "country", "is_active"
     ];
 
+    //working
     public function shop()
     {
-        //testing
         return $this->hasOne('App\Shop');
     }
 }
