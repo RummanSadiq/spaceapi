@@ -39,15 +39,14 @@ class ShopController extends Controller
     {
 
         $user = Auth::user();
-        $shop = $user->shop;
+        $shop = $user->shop->with('attachments', 'shopType', 'address')->first();
 
         $shop['shop_owner'] = $user->name;
-        $shop['shop_type'] = ShopType::find($shop->shop_type_id)->name;
-        $shop['address'] = Address::find($shop->address_id)->place;
-        $shop['city'] = Address::find($shop->address_id)->city;
+        // $shop['shop_type'] = ShopType::find($shop->shop_type_id)->name;
+        // $shop['address'] = Address::find($shop->address_id)->place;
+        // $shop['city'] = Address::find($shop->address_id)->city;
         $shop['name'] = strtoupper($shop->name);
 
-        $shop->attachments;
         $shop['total_views'] = $shop->totalViews();
         $shop['total_followers'] = $shop->totalfollowers();
 

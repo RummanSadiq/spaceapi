@@ -42,6 +42,10 @@ Route::middleware('json.response')->group(function () {
         Route::get('/follow/{id}', 'Api\ShopFollowerController@follow');
         Route::get('/followed', 'Api\ShopFollowerController@index');
 
+
+        //Shop Address
+        Route::post('/add/location', 'Api\AddressController@addLocation');
+
         //Shop
         Route::post('/shop', 'Api\ShopController@store');
         Route::post('/updateshop', 'Api\ShopController@update');

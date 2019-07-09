@@ -18,6 +18,14 @@ class AddressController extends Controller
         //
     }
 
+
+    public function addLocation(Request $request)
+    {
+        $user = Auth::user();
+        $shop = $user->shop->address->update($request->all());
+
+        return response()->json($shop);
+    }
     /**
      * Show the form for creating a new resource.
      *
