@@ -169,7 +169,7 @@ class ProductController extends Controller
     public function getShopProducts($shop_id)
     {
         $shop = Shop::find($shop_id);
-        $products = $shop->products->->where('is_active', '1')->reverse()->values();
+        $products = $shop->products->where('is_active', '1')->reverse()->values();
 
         return response()->json($this->modifyProducts($products));
     }
