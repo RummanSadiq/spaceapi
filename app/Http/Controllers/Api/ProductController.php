@@ -159,10 +159,12 @@ class ProductController extends Controller
             }
         }
 
-        usort($modified->values(), 'sort_objects_by_total');
+        $values = $modified->values();
+
+        usort($values, 'sort_objects_by_total');
 
 
-        return response()->json($modified);
+        return response()->json($values);
     }
 
     function sort_objects_by_total($a, $b)
