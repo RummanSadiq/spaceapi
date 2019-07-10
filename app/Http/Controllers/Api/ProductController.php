@@ -154,14 +154,23 @@ class ProductController extends Controller
 
             if ($lat2 != null) {
                 $prod['distance'] = $this->distance($lat1, $lon1, $lat2, $lon2);
+            } else {
+                $prod['distance'] = 0;
             }
         }
 
-        usort(array($modified), function ($item1, $item2) {
-            return $item2['distance'] <=> $item1['distance'];
-        });
+        usort($modified, 'sort_objects_by_total');
+
 
         return response()->json($modified);
+    }
+
+    function sort_objects_by_total($a, $b)
+    {
+        if ($a->distance == $b->distance) {
+            return 0;
+        }
+        return ($a->distance < $b->distance) ? -1 : 1;
     }
 
     function distance($lat1, $lon1, $lat2, $lon2)
