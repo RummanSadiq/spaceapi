@@ -157,7 +157,7 @@ class ProductController extends Controller
             }
         }
 
-        return response()->json($modified->orderBy('distance')->get());
+        return response()->json($modified);
     }
 
     function distance($lat1, $lon1, $lat2, $lon2)
