@@ -4,6 +4,8 @@ namespace App;
 
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -39,7 +41,7 @@ class User extends Authenticatable
 
     public function shop()
     {
-        return $this->hasOne('App\Shop');
+        return $this->hasOne('App\Shop')->where('user_id', Auth::id());
     }
 
     public function messages()
