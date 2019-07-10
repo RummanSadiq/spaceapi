@@ -47,6 +47,8 @@ class ProductController extends Controller
         $prod['total_views'] = $prod->totalViews();
         $prod->attachments;
         $prod->shop;
+        $prod->shop->address;
+
 
         foreach ($prod['attachments'] as $attachment) {
 
@@ -90,7 +92,7 @@ class ProductController extends Controller
             'name',
             'LIKE',
             '%' . $search . '%'
-        )->get();
+        )->latest()->get();
 
         if (count($products) < 1) {
             return response()->json('No results found!');
@@ -135,15 +137,40 @@ class ProductController extends Controller
             'name',
             'LIKE',
             '%' . $search . '%'
-        )->orderBy('price', 'desc')->get();
+        )->get();
 
         if (count($products) < 1) {
             return response()->json('No results found!');
         }
 
-        return response()->json($this->modifyProducts($products));
+        $modified = $this->modifyProducts($products);
+
+
+        foreach ($modified as $prod) {
+            $lat1 = $request['latitude'];
+            $lon1 = $request['longitude'];
+            $lat2 = $prod->shop->address->latitude;
+            $lon2 = $prod->shop->address->longitude;
+
+            if ($lat2 != null) {
+                $prod['distance'] = $this->distance($lat1, $lon1, $lat2, $lon2);
+            }
+        }
+
+        return response()->json($modified->orderBy('distance')->get());
     }
 
+    function distance($lat1, $lon1, $lat2, $lon2)
+    {
+
+        $theta = $lon1 - $lon2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+
+        return ($miles * 1.609344);
+    }
 
     public function getFiltered(Request $request)
     {
@@ -394,7 +421,7 @@ class ProductController extends Controller
     public function all()
     {
         if (Auth::user()->is_super_admin) {
-            return response()->json(Product::all());
+            return response()->json($this->modifyProducts(Product::all()));
         } else {
             return response()->json(401);
         }

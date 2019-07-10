@@ -38,17 +38,17 @@ class NotificationController extends Controller
          * 
          */
 
-        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'user')->get()));
+        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'user')->latest()->get()));
     }
 
     public function shopIndex()
     {
-        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'shop')->get()));
+        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'shop')->latest()->get()));
     }
 
     public function adminIndex()
     {
-        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'admin')->get()));
+        return response()->json($this->modifyResponse(Notification::where('receiver_type', 'admin')->latest()->get()));
     }
 
     private function modifyResponse($notifications)
