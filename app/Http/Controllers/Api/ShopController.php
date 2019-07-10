@@ -164,8 +164,13 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        $shop = Shop::findOrFail($id)->with('address', 'user', 'shopType', 'attachments', 'reviews')->get()->first();
+        $shop = Shop::findOrFail($id);
 
+        $shop->address;
+        $shop->user;
+        $shop->shopType;
+        $shop->attachments;
+        $shop->reviews;
         $reviews = $shop->reviews;
 
 
