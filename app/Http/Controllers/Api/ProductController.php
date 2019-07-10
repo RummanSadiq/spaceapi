@@ -84,6 +84,67 @@ class ProductController extends Controller
         return response()->json($this->modifyProducts($products));
     }
 
+    public function search($search)
+    {
+        $products = Product::where(
+            'name',
+            'LIKE',
+            '%' . $search . '%'
+        )->get();
+
+        if (count($products) < 1) {
+            return response()->json('No results found!');
+        }
+
+        return response()->json($this->modifyProducts($products));
+    }
+
+    public function searchLow($search)
+    {
+        $products = Product::where(
+            'name',
+            'LIKE',
+            '%' . $search . '%'
+        )->orderBy('price', 'asc')->get();
+
+        if (count($products) < 1) {
+            return response()->json('No results found!');
+        }
+
+        return response()->json($this->modifyProducts($products));
+    }
+
+    public function searchHigh($search)
+    {
+        $products = Product::where(
+            'name',
+            'LIKE',
+            '%' . $search . '%'
+        )->orderBy('price', 'desc')->get();
+
+        if (count($products) < 1) {
+            return response()->json('No results found!');
+        }
+
+        return response()->json($this->modifyProducts($products));
+    }
+
+    public function searchNearBy($search)
+    {
+        $products = Product::where(
+            'name',
+            'LIKE',
+            '%' . $search . '%'
+        )->orderBy('price', 'desc')->get();
+
+        if (count($products) < 1) {
+            return response()->json('No results found!');
+        }
+
+        return response()->json($this->modifyProducts($products));
+    }
+
+
     public function getFiltered(Request $request)
     {
         if ($request->has("search")) {
