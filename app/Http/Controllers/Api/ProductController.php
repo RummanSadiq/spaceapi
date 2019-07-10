@@ -129,7 +129,7 @@ class ProductController extends Controller
         return response()->json($this->modifyProducts($products));
     }
 
-    public function searchNearBy($search)
+    public function searchNearBy(Request $request, $search)
     {
         $products = Product::where(
             'name',

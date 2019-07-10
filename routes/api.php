@@ -182,7 +182,7 @@ Route::middleware('json.response')->group(function () {
     Route::get('/search/{search}', 'Api\ProductController@search');
     Route::get('/search/{search}/sort/price_low', 'Api\ProductController@searchLow');
     Route::get('/search/{search}/sort/price_high', 'Api\ProductController@searchHigh');
-    Route::get('/search/{search}/sort/rearby', 'Api\ProductController@searchNearby');
+    Route::post('/search/{search}/sort/nearby', 'Api\ProductController@searchNearby');
     Route::get('/products/shop/{id}', 'Api\ProductController@getShopProducts');
     Route::get('/products/{id}', 'Api\ProductController@show');
 
