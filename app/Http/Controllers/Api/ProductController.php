@@ -159,7 +159,16 @@ class ProductController extends Controller
             }
         }
 
-        $values = $modified->values();
+
+        foreach ($modified as $prod) {
+            foreach ($modified as $prod2) {
+                if ($prod->distance > $prod2->distance) {
+                    $temp = $prod;
+                    $prod = $prod2;
+                    $prod2 = $temp;
+                }
+            }
+        }
 
         usort($values, 'sort_objects_by_total');
 
