@@ -157,7 +157,7 @@ class ProductController extends Controller
             }
         }
 
-        usort($modified, function ($item1, $item2) {
+        usort(array($modified), function ($item1, $item2) {
             return $item2['distance'] <=> $item1['distance'];
         });
 
