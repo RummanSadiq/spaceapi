@@ -79,7 +79,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         $shop = $user->shop;
-        $products = $shop->products->reverse()->values();
+        $products = $shop->products->where('is_active', '1')->reverse()->values();
 
         return response()->json($this->modifyProducts($products));
     }
@@ -137,7 +137,7 @@ class ProductController extends Controller
         foreach ($request['products'] as $id) {
             $product = Product::findOrFail($id);
             $product->update([
-                "sale_price" => $product->price - ($product->price * ((int)$request['percent'] / 100)),
+                "sale_price" => $product->price - ($product->price * ((int) $request['percent'] / 100)),
                 "sale_starts_at" => now(),
                 "sale_ends_at" => $request['sale_ends_at']
             ]);
