@@ -22,6 +22,6 @@ Broadcast::channel('messages.customer.{id}', function ($user, $id) {
 
 
 Broadcast::channel('messages.shop.{id}', function ($user, $id) {
-    $user_id = Shop::find($id)->user_id;
-    return $user->id == (int) $user_id;
+    $shop = Shop::find($id);
+    return $user->id == (int) $shop->user_id;
 });
