@@ -46,8 +46,17 @@ class PassportController extends Controller
             'password' => $request->password
         ];
 
+
         if (auth()->guard('web')->attempt($credentials)) {
+
+            $user = User::where('email', $request->email)->first();
+            if ($user->is_active == '0') {
+                return response()->json(['error' => 'Blocked'], 401);
+            }
+
             $token = auth()->guard('web')->user()->createToken($request->email)->accessToken;
+
+
             return response()->json(['token' => $token], 200);
         } else {
             return response()->json(['error' => 'UnAuthorised'], 401);
